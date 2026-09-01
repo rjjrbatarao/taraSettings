@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <title>My Web Page</title>
+    <link rel="stylesheet" href="style.css" />
+
+  </head>
+  <body>
+	
+    <script src="obrajs.js"></script>
+    <script src="index.js"></script>
+
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/sloader2/sw.js")
+            .then((registration) => {
+              console.log("SW registered successfully:", registration.scope);
+
+              // Keep-Alive Heartbeat: Pings the Service Worker every 25 seconds
+              setInterval(() => {
+                if (registration.active) {
+                  registration.active.postMessage({ type: "PING" });
+                }
+              }, 25000);
+            })
+            .catch((error) => {
+              console.error("SW registration failed:", error);
+            });
+        });
+      }
+    </script>
+  </body>
+</html>
